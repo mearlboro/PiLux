@@ -1,0 +1,18 @@
+camera:
+  awb_mode: sunlight
+  framerate: 12
+  iso: 100
+  resolution:
+    height: 480
+    width: 640
+  saturation: 100
+  shutter_speed: 31250
+effects:
+  solid_color:
+    hue: 178
+    saturation: 218
+    value: 192
+server:
+  CAMERA: 0
+  HOST: 0.0.0.0
+  PORT: 8888

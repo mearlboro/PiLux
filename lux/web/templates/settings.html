@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>ST Lux</title>
+  </head>
+  <body>
+    <h1>ST Lux</h1>
+
+    <form action="{{ url_for('settings') }}" method="post">
+      <p>
+      <label for="solid_color"> color (HSV)</label>
+      <input type="color" id="solid_color" name="solid_color" value="{{ opts.effects.solid_color}}">
+      </p>
+
+      <p>
+      <label for="save_file"> Save to file:</label>
+      <input type="checkbox" id="save_file" name="save_file" value="{{ save_file }}">
+      <input type="text" id="conf_path" name="conf_path" value="{{ conf_path }}">
+      </p>
+
+      <p>
+      <button type="submit">Update Settings</button>
+      </p>
+    </form>
+
+
+  </body>
+</html>

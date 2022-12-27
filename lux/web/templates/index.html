@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>ST Lux</title>
+  </head>
+  <body>
+    <h1>ST Lux</h1>
+
+    <h2>Effects</h1>
+    <p>Solid Color</p>
+    <input type="button" style="background-color: {{ opts.effects.solid_color }}"
+                         value="{{ opts.effects.solid_color }}" />
+
+    <ul>
+	    <li><a href="/start" >Start</a></li>
+        <li><a href="/stop" >Stop</a></li>
+        <li><a href="/settings" >Settings</a></li>
+    </ul>
+
+    <ul>
+        <p> {{ running_text }} </p>
+	    <!-- li><a href="/video_feed" >View Live Feed</a></li -->
+    </ul>
+  </body>
+</html>
