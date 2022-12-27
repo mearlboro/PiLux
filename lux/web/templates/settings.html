@@ -6,11 +6,37 @@
     <h1>ST Lux</h1>
 
     <form action="{{ url_for('settings') }}" method="post">
+      <h2>Segments</h2>
       <p>
-      <label for="solid_color"> color (HSV)</label>
-      <input type="color" id="solid_color" name="solid_color" value="{{ opts.effects.solid_color}}">
+      <label for="range_min">MIN</label>
+      <input type="number" id="range_min" value="{{ opts.segment.range.min }}">
+      </p>
+      <p>
+      <label for="range_min">MAX</label>
+      <input type="number" id="range_max" value="{{ opts.segment.range.max }}">
+      </p>
+      <p>
+      <label for="reverse">reverse</label>
+      <input type="checkbox" id="reverse" value="{{ opts.segment.reverse }}">
       </p>
 
+      <h2>Effects</h2>
+      <p>
+        <select type="text" id="effect" name="effect" selected="{{ opts.segment.effect }}">
+            {% for eff in effects %}
+            <option value="{{ eff }}" {{ 'selected' if opts.segment.effect == eff else '' }}>{{ eff }}</option>
+            {% endfor %}
+        </select>
+      </p>
+	  TODO: effect settings
+
+	  <h3>Solid colour</h3>
+      <p>
+      <label for="solid"> HEX RGB</label>
+      <input type="color" id="solid" name="solid" value="{{ opts.segment.effect.solid }}">
+      </p>
+
+      <h2>Save</h2>
       <p>
       <label for="save_file"> Save to file:</label>
       <input type="checkbox" id="save_file" name="save_file" value="{{ save_file }}">

@@ -14,8 +14,10 @@ from typing import Any, Dict, List, Tuple, Generator
 import lux.tools.logger
 
 # import relevant project libs
-from lux.tools.colour  import hex_to_hsv
-from lux.tools.config  import parse, unwrap_resolution
+from lux.leds import effects
+from lux.leds.segment import Segment
+from lux.tools.colour  import hex_to_rgb, hex_to_hsv, hsv_to_hex
+from lux.tools.config  import parse, unwrap_hsv, unwrap_resolution
 
 
 # NOTE: possibly useful for fetching a video stream in the ambilight mode
@@ -123,6 +125,24 @@ class LEDHandler():
         self.config = config
         self.running = False
 
+        # setup LED array
+        # TODO: multiple segments
+        s = config.segment
+        if config.leds == "WS2801":
+            from lux.leds.ws2801_segment import WS2801_Segment
+            self.segments = [ WS2801Segment((s.range.min, s.range.max), s.reverse) ]
+        else:
+            self.segments = [ Segment((s.range.min, s.range.max), s.reverse) ]
+
+        # TODO: enable effect in config
+        # TODO: proper colour conversions
+        hsv = unwrap_hsv(config.segment.effect.solid)
+        col = hsv_to_hex(hsv)
+        col = hex_to_rgb(col)
+        effects.solid(self.segments[0], col)
+
+
+        # if any streaming is done the below are used
         self.camera_stream  = camera_stream
 
         # initialize the output frame and a lock used to ensure thread-safe
@@ -136,9 +156,12 @@ class LEDHandler():
         self.lock = threading.Lock()
 
 
-    def update_solid_color(self, color: SimpleNamespace) -> None:
+    def update_solid(self, col: SimpleNamespace) -> None:
         """
+        TODO:
         Following a form submission in the front-end, reinitialise config
+        generic update_effect which uses effect name and manipulates config
+        to call a function from effects onto segment(s)
 
         Params
         ------
@@ -148,7 +171,10 @@ class LEDHandler():
         ------
         TODO:
         """
-        self.config.effects.solid_color = parse(hex_to_hsv(color))
+        hsv = parse(hex_to_hsv(col))
+        self.config.segment.effect.solid = hsv
+        rgb = hex_to_rgb(col)
+        effects.solid(self.segments[0], rgb)
 
 
     def update_picamera(self,

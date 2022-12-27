@@ -1,7 +1,42 @@
 import cv2
 import numpy as np
 
-from typing import Dict
+from typing import Dict, Tuple
+
+def hex_to_rgb(c: str) -> Tuple[int, int, int]:
+    """
+    Convert from hex to RGB
+
+    Params
+    ------
+    c
+        7-digit hex string of the form #ffffff representing a RGB colour
+
+    Returns
+    ------
+    Tuple with RGB values 0-255
+    """
+    rgb = np.uint8([ int(c[i:j], base = 16) for i,j in [(1,3),(3,5),(5,7)] ])
+    return (rgb[0], rgb[1], rgb[2])
+
+
+def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
+    """
+    Convert from RGB tuple, to HTML compatible hex colour
+
+    Params
+    ------
+    rgb
+        tuple with RGB values 0-255
+
+    Returns
+    ------
+    7-digit hex string of the form #ffffff representing a RGB colour
+    """
+    hexs = [ str(hex(i))[2:] for i in list(rgb) ]
+    hexs = [ f"0{i}" if len(i) == 1 else i for i in hexs ]
+    return '#' + ''.join(hexs)
+
 
 def hex_to_hsv(c: str) -> Dict[str, int]:
     """

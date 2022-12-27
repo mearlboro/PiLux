@@ -7,11 +7,33 @@ camera:
     width: 640
   saturation: 100
   shutter_speed: 31250
-effects:
-  solid_color:
-    hue: 178
-    saturation: 218
-    value: 192
+leds: ''
+segment:
+  effect:
+    solid:
+      hue: 23
+      saturation: 237
+      value: 245
+  range:
+    max: 10
+    min: 0
+  reverse: false
+segments:
+- effect: VU
+  range:
+    max: 10
+    min: 0
+  reverse: true
+- effect: FFT
+  range:
+    max: 20
+    min: 10
+  reverse: false
+- effect: VU
+  range:
+    max: 30
+    min: 20
+  reverse: false
 server:
   CAMERA: 0
   HOST: 0.0.0.0

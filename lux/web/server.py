@@ -8,23 +8,11 @@ import yaml
 from types import SimpleNamespace
 from copy import deepcopy
 
+from lux.leds.effects import effect_names
 from lux.web.handler  import LEDHandler
 from lux.tools.config import parse, unparse, unwrap_hsv
 from lux.tools.colour import hsv_to_hex
 
-awb_modes = [
-    "off",
-    "auto",
-    "sunlight",
-    "cloudy",
-    "shade",
-    "tungsten",
-    "fluorescent",
-    "incandescent",
-    "flash",
-    "horizon",
-    "greyworld"
-]
 
 def create_app(server_type, conf, conf_path, camera_stream=None):
     app = Flask(__name__)
@@ -52,7 +40,7 @@ def create_app(server_type, conf, conf_path, camera_stream=None):
     @app.route("/")
     def index():
         opts = unparse(proc.config)
-        opts['effects']['solid_color'] = hsv_to_hex(vars(proc.config.effects.solid_color))
+        opts['segment']['effect']['solid'] = hsv_to_hex(vars(proc.config.segment.effect.solid))
         return render_template("index.html", opts = opts, running_text=is_running())
 
     @app.route("/start")
@@ -73,23 +61,25 @@ def create_app(server_type, conf, conf_path, camera_stream=None):
 
         if request.method == 'GET':
             opts = unparse(proc.config)
-            # TODO: update relevant config to project
             # color picker expects hex colours
-            opts['effects']['solid_color'] = hsv_to_hex(vars(proc.config.effects.solid_color))
+            opts['segment']['effect']['solid'] = hsv_to_hex(vars(proc.config.segment.effect.solid))
 
             return render_template("settings.html", #use_picamera = use_picamera,
-                conf_path = proc.config.conf_path, save_file = False, opts = opts, awb_modes = awb_modes)
+                conf_path = proc.config.conf_path, save_file = False,
+                opts = opts, effects = effect_names)
         else:
             #if use_picamera:
             #    proc.update_picamera(request.form['iso'], request.form['shutter_speed'],
             #        request.form['saturation'], request.form['awb_mode'])
-            proc.update_solid_color(request.form['solid_color'])
+            # TODO: implement effect switch
+            if request.form['effect'] == 'solid':
+                proc.update_solid(request.form['solid'])
 
             if 'save_file' in request.form:
                 conf_path = request.form['conf_path']
                 file = open(conf_path, 'w')
                 conf_to_save = deepcopy(proc.config)
-                conf_to_save.effects.solid_color = parse(unwrap_hsv(conf_to_save.effects.solid_color))
+                conf_to_save.segment.effect.solid = parse(unwrap_hsv(conf_to_save.segment.effect.solid))
                 delattr(conf_to_save, 'conf_path')
                 yaml.dump(unparse(conf_to_save), file)
 
