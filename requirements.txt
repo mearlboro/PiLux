@@ -1,0 +1,4 @@
+Adafruit_WS2801
+asyncio
+logging
+numpy
