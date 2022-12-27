@@ -53,3 +53,9 @@ dmypy.json
 # vim swap files
 *.swp
 *.swo
+
+# nix related
+result
+pi3-installer
+pi4-installer
+nix/wifi-password.nix
