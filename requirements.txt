@@ -1,0 +1,7 @@
+#Adafruit_WS2801
+asyncio
+Flask
+imutils
+opencv-contrib-python~=4.4.0.46
+numpy
+pyyaml
